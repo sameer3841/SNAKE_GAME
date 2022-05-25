@@ -12,8 +12,8 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int UNIT_SIZE = 25;
     static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / UNIT_SIZE;
     static final int DELAY = 75;
-    final int x[] = new int[GAME_UNITS];
-    final int y[] = new int[GAME_UNITS];
+    final int[] x = new int[GAME_UNITS];
+    final int[] y = new int[GAME_UNITS];
     int bodyParts = 6;
     int dotsEaten;
     int dotX;
@@ -51,6 +51,8 @@ public class GamePanel extends JPanel implements ActionListener {
                 g.drawLine(i*UNIT_SIZE,0,i*UNIT_SIZE,SCREEN_HEIGHT);
                 g.drawLine(0,i*UNIT_SIZE,SCREEN_WIDTH,i*UNIT_SIZE);
             }
+
+            The code above shows the grid of the map. Don't need this grid, so it is converted into a comment.
              */
             g.setColor(Color.yellow);
             g.fillOval(dotX,dotY,UNIT_SIZE,UNIT_SIZE);
@@ -61,6 +63,7 @@ public class GamePanel extends JPanel implements ActionListener {
                     g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                 } else {
                     //g.setColor(new Color(75, 6, 6));
+                    //The line below gives snake darker but colorful body parts except the head of the snake
                     g.setColor(new Color(random.nextInt(155),random.nextInt(155),random.nextInt(155)));
                     g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                 }
@@ -71,14 +74,15 @@ public class GamePanel extends JPanel implements ActionListener {
             g.drawString("Score: " + dotsEaten,(SCREEN_WIDTH - metrics.stringWidth("Score: " + dotsEaten)) / 2, g.getFont().getSize());
 
         } else {
-           GameOver(g);
+            GameOver(g);
         }
 
     }
 
     public void newDot(){
-        dotX = random.nextInt((int)(SCREEN_WIDTH/UNIT_SIZE)) * UNIT_SIZE;
-        dotY = random.nextInt((int)(SCREEN_HEIGHT/UNIT_SIZE)) * UNIT_SIZE;
+        //spawns yellow dot
+        dotX = random.nextInt(SCREEN_WIDTH/UNIT_SIZE) * UNIT_SIZE;
+        dotY = random.nextInt(SCREEN_HEIGHT/UNIT_SIZE) * UNIT_SIZE;
 
     }
 
@@ -87,23 +91,23 @@ public class GamePanel extends JPanel implements ActionListener {
             x[i] = x[i-1];
             y[i] = y[i-1];
         }
-        switch (direction){
-            case 'U':
-                y[0] = y[0] - UNIT_SIZE;
-                break;
-            case 'D':
-                y[0] = y[0] + UNIT_SIZE;
-                break;
-            case 'L':
-                x[0] = x[0] - UNIT_SIZE;
-                break;
-            case 'R':
-                x[0] = x[0] + UNIT_SIZE;
-                break;
+        switch (direction) {
+            //Up
+            case 'U' -> y[0] = y[0] - UNIT_SIZE;
+
+            //down
+            case 'D' -> y[0] = y[0] + UNIT_SIZE;
+
+            //left
+            case 'L' -> x[0] = x[0] - UNIT_SIZE;
+
+            //right
+            case 'R' -> x[0] = x[0] + UNIT_SIZE;
         }
     }
 
     public void checkDot(){
+        //if snake finds dot, snake grows one block longer, score increase by 1, and dot respawns in a new location
         if((x[0] == dotX) && (y[0] == dotY)){
             bodyParts++;
             dotsEaten++;
@@ -114,11 +118,12 @@ public class GamePanel extends JPanel implements ActionListener {
     public void checkCollisions() {
         //checks if head touches body
         for(int i = bodyParts; i > 0; i--){
-            if((x[0] == x[i]) && (y[0] == y[i])){
+            if ((x[0] == x[i]) && (y[0] == y[i])) {
                 running = false;
+                break;
             }
         }
-      //These if statements are for the borders
+        //These if statements are for the borders of the game screen
         //left border
         if(x[0] < 0){
             running = false;
@@ -135,8 +140,8 @@ public class GamePanel extends JPanel implements ActionListener {
         if(y[0] > SCREEN_HEIGHT){
             running = false;
         }
-
-        if(running == false) {
+        //timer stops if snake touches body or any border of screen
+        if(!running) {
             timer.stop();
         }
     }
@@ -169,26 +174,33 @@ public class GamePanel extends JPanel implements ActionListener {
         @Override
         public void keyPressed(KeyEvent e){
             switch (e.getKeyCode()){
+
+                //Controls are WASD!!!
+                //Goes left
                 case KeyEvent.VK_A:
                     if(direction != 'R'){
                         direction = 'L';
                     }
                     break;
+                //Goes right
                 case KeyEvent.VK_D:
                     if(direction != 'L'){
                         direction = 'R';
                     }
                     break;
+                //Goes up
                 case KeyEvent.VK_W:
                     if(direction != 'D'){
                         direction = 'U';
                     }
                     break;
+                //Goes down
                 case KeyEvent.VK_S:
                     if(direction != 'U'){
                         direction = 'D';
                     }
                     break;
+                //Restarts the game
                 case KeyEvent.VK_SPACE:
                     dotsEaten = 0;
                     new GameFrame();
