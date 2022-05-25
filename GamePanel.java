@@ -60,8 +60,8 @@ public class GamePanel extends JPanel implements ActionListener {
                     g.setColor(new Color(156, 11, 11));
                     g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                 } else {
-                    g.setColor(new Color(75, 6, 6));
-                    g.setColor(new Color(random.nextInt(255),random.nextInt(255),random.nextInt(255)));
+                    //g.setColor(new Color(75, 6, 6));
+                    g.setColor(new Color(random.nextInt(155),random.nextInt(155),random.nextInt(155)));
                     g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                 }
             }
@@ -169,26 +169,29 @@ public class GamePanel extends JPanel implements ActionListener {
         @Override
         public void keyPressed(KeyEvent e){
             switch (e.getKeyCode()){
-                case KeyEvent.VK_LEFT:
+                case KeyEvent.VK_A:
                     if(direction != 'R'){
                         direction = 'L';
                     }
                     break;
-                case KeyEvent.VK_RIGHT:
+                case KeyEvent.VK_D:
                     if(direction != 'L'){
                         direction = 'R';
                     }
                     break;
-                case KeyEvent.VK_UP:
+                case KeyEvent.VK_W:
                     if(direction != 'D'){
                         direction = 'U';
                     }
                     break;
-                case KeyEvent.VK_DOWN:
+                case KeyEvent.VK_S:
                     if(direction != 'U'){
                         direction = 'D';
                     }
                     break;
+                case KeyEvent.VK_SPACE:
+                    dotsEaten = 0;
+                    new GameFrame();
             }
         }
     }
